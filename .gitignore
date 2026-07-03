@@ -1,0 +1,4 @@
+# Regenerated hand-off files between stages (rebuilt by run_all.py)
+artifacts/_intermediate/
+__pycache__/
+*.pyc
