@@ -1,0 +1,72 @@
+{
+  "stage": "stage4_matrix",
+  "variants": {
+    "default_loan_excluded": {
+      "n_taxa": 27,
+      "n_characters": 3448,
+      "n_parsimony_informative": 983,
+      "n_singleton_autapomorphies": 2465,
+      "n_dropped_characters": 4,
+      "dropped_examples": [
+        {
+          "cogset": "14-a",
+          "meaning": "I",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "84-a",
+          "meaning": "eye",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "196-a",
+          "meaning": "two",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "201-a",
+          "meaning": "we",
+          "reason": "constant present in all taxa (uninformative)"
+        }
+      ],
+      "nexus": "artifacts/cognate_matrix.nex",
+      "csv": "artifacts/cognate_matrix.csv"
+    },
+    "baseline_no_exclusion": {
+      "n_taxa": 27,
+      "n_characters": 3787,
+      "n_parsimony_informative": 1350,
+      "n_singleton_autapomorphies": 2437,
+      "n_dropped_characters": 5,
+      "dropped_examples": [
+        {
+          "cogset": "14-a",
+          "meaning": "I",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "16-a",
+          "meaning": "name",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "84-a",
+          "meaning": "eye",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "196-a",
+          "meaning": "two",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "201-a",
+          "meaning": "we",
+          "reason": "constant present in all taxa (uninformative)"
+        }
+      ],
+      "nexus": "artifacts/cognate_matrix_baseline_noexclusion.nex",
+      "csv": "artifacts/cognate_matrix_baseline_noexclusion.csv"
+    }
+  }
+}
