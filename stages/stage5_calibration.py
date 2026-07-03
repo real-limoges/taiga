@@ -68,13 +68,19 @@ def run():
     # Which cognate sets (core layer) span which subgroups (attested langs only)?
     cogset_subs = collections.defaultdict(set)
     cogset_langs = collections.defaultdict(set)
-    cogset_lik = {}
+    cogset_liks = collections.defaultdict(set)  # a set may mix likelihoods across records
     for r in core:
         if r["is_proto"]:
             continue
         cogset_subs[r["cogset"]].add(r["subgroup"])
         cogset_langs[r["cogset"]].add(r["language"])
-        cogset_lik[r["cogset"]] = r["likelihood"]
+        cogset_liks[r["cogset"]].add(r["likelihood"])
+
+    def lik_label(c):
+        # honest per-set likelihood: single value if uniform, else "min..max"
+        order = ["possible", "probable", "clear"]
+        ls = sorted(cogset_liks[c], key=order.index)
+        return ls[0] if len(ls) == 1 else f"{ls[0]}..{ls[-1]}"
     cross_branch = {c: sorted(s) for c, s in cogset_subs.items() if len(s) > 1}
 
     # The "widest" core-II sets (reach the most subgroups) = the anchor evidence.
@@ -112,7 +118,7 @@ def run():
         "widest_core_ii_sets": [
             {"cogset": c, "meaning": params[c.split("-")[0]]["Name"],
              "subgroups": subs, "n_subgroups": len(subs),
-             "likelihood": cogset_lik[c],
+             "likelihood": lik_label(c),
              "languages": sorted(cogset_langs[c])}
             for c, subs in widest[:8]
         ],
@@ -126,10 +132,25 @@ def run():
     # ------------------------------------------------------------------ #
     # 4. Node determination + branch-specific-reflex evidence.            #
     # ------------------------------------------------------------------ #
-    # Pull the 'horn' set (40-a) reflexes to show branch-specific sound outcomes.
-    horn = [r for r in core if r["cogset"] == "40-a"]
-    horn_reflexes = {r["subgroup"]: r["form"] for r in sorted(horn, key=lambda x: x["subgroup"])
-                     if not r["is_proto"]}
+    # Pull the 'horn' set (40-a) reflexes to CHARACTERISE the item (one
+    # representative major language per subgroup, avoiding outliers like the
+    # Livonian form which has lost -v-). NB: these are illustrative only; see the
+    # direction reasoning for why regular reflexes do NOT date the borrowing.
+    representative = {"Finnic": "Standard Finnish", "Saami": "North Saami",
+                      "Mordvin": "Erzya", "Mari": "Meadow Mari",
+                      "Permic": "Komi-Zyrian", "Ugric": "Hungarian"}
+    horn = [r for r in core if r["cogset"] == "40-a" and not r["is_proto"]]
+    horn_by_sub = collections.defaultdict(dict)
+    for r in horn:
+        horn_by_sub[r["subgroup"]][r["language"]] = r["form"]
+    horn_reflexes = {}
+    for subgrp_name, langs in horn_by_sub.items():
+        pref = representative.get(subgrp_name)
+        if pref and pref in langs:
+            horn_reflexes[subgrp_name] = f"{langs[pref]} ({pref})"
+        else:
+            lang = sorted(langs)[0]
+            horn_reflexes[subgrp_name] = f"{langs[lang]} ({lang})"
 
     fu_taxa = [v["name"] for v in tables["varieties"]
                if v["subgroup"] in cfg.FINNO_UGRIC_SUBGROUPS]
@@ -180,11 +201,24 @@ def run():
             "grounds; c. 2000 BCE ~= 4000 years before present."),
         "constraint_type": "minimum_age (hard lower bound)",
         "constraint_direction_reasoning": (
-            "The loans entered branches that had ALREADY begun their own sound changes "
-            "(they surface with regular BRANCH-SPECIFIC reflexes, not one uniform proto-form), "
-            "so the Finno-Ugric crown had already split into its daughter branches by the time "
-            "of contact. Therefore the crown's divergence PRE-DATES the contact: "
-            "age(FU crown) >= age(contact) ~= 4000 BP. This is a lower bound, not a point age."),
+            "Direction (minimum vs maximum) turns on whether the loans entered BEFORE or AFTER "
+            "Finno-Ugric began to diverge. We adopt the MINIMUM (lower-bound) reading, resting it "
+            "on the DISTRIBUTIONAL HETEROGENEITY of the layer, not on sound reflexes: most core "
+            "Indo-Iranian loans reach only a SUBSET of branches (e.g. 'good' 57-b "
+            "Saami/Mordvin/Mari/Permic; 'green' 138-a Finnic/Mari/Permic; 'sister' 279-a "
+            "Mordvin/Permic; 'root' 9-c Mordvin/Saami), which is the signature of prolonged areal "
+            "contact with an ALREADY-DIFFERENTIATING dialect network rather than a single borrowing "
+            "into one unified proto-language (which would give uniform pan-branch distribution). If "
+            "the branches were already separating when they took up the layer, their common ancestor "
+            "(the FU crown) had already split by contact, so age(FU crown) >= age(contact) ~= 4000 BP. "
+            "IMPORTANT HONEST CAVEAT: regular branch-specific SOUND reflexes do NOT by themselves "
+            "settle the direction -- a word borrowed into an undivided ancestor and then inherited "
+            "acquires each branch's regular reflexes too. The single pan-distributed item 'horn' 40-a "
+            "(reconstructible to one form *sarwi with regular reflexes in every branch) is in fact "
+            "equally consistent with borrowing into a still-unified ancestor, which would make ~4000 BP "
+            "a MAXIMUM. We therefore do NOT rest the minimum reading on any single etymon; see the "
+            "'Direction sensitivity' caveat. A minimum-age bound is also the more conservative "
+            "calibration choice."),
         "constraint_value_years_BP": 4000,
         "not_proto_uralic_because": (
             "The clear/core Indo-Iranian loans are confined to Finno-Ugric and are essentially "
@@ -249,12 +283,19 @@ def run():
                     "from the core-II anchor; Ugric still participates in the core Indo-Iranian layer "
                     "(e.g. shares 'horn' 40-a and 'house' 26-b), so the crown remains inclusive of Ugric."),
          "effect_on_call": "Ugric retained inside the calibrated clade."},
-        {"issue": "Direction sensitivity",
-         "detail": ("If one instead judged the loans to have entered a still-UNDIVIDED proto-language, "
-                    "the same 4000 BP date would become a MAXIMUM (upper) bound on that node. We follow "
-                    "the phonological evidence (regular branch-specific reflexes) that the branches were "
-                    "already differentiating, which makes 4000 BP a MINIMUM on the FU crown."),
-         "effect_on_call": "Determines lower- vs upper-bound; we use lower bound."},
+        {"issue": "Direction sensitivity (minimum vs maximum) -- the main limitation",
+         "detail": ("Regular branch-specific sound reflexes do NOT discriminate the two scenarios: a "
+                    "word borrowed into an undivided ancestor and then inherited would show the same "
+                    "regular per-branch correspondences as one borrowed into already-separated branches. "
+                    "The flagship pan-distributed item 'horn' 40-a even fits the UNDIVIDED-ancestor "
+                    "reading (single reconstructible *sarwi, all branches), under which ~4000 BP would be "
+                    "a MAXIMUM, not a minimum. We adopt the MINIMUM reading on the strength of the "
+                    "LAYER's distributional heterogeneity (most core loans reach only a subset of "
+                    "branches -> areal spread across an already-differentiating network) plus the "
+                    "conservatism of a lower bound -- NOT on the reflex pattern of any single etymon. An "
+                    "analyst who reads the layer as pre-divergence should flip this to a maximum-age "
+                    "bound on the same node."),
+         "effect_on_call": "Determines lower- vs upper-bound; we use a lower bound but flag this as interpretive."},
     ]
 
     scheme = {
@@ -269,19 +310,24 @@ def run():
         "branch_specific_reflex_evidence": {
             "example_set": "40-a 'horn' (Indo-Iranian loan)",
             "reflexes_by_subgroup": horn_reflexes,
-            "point": ("The one loan surfaces as Finnic sarvi, Saami coarvi, Mari sur, Mordvin suro, "
-                      "Permic sur, Ugric (Hung.) szarv: the regular, DIFFERING per-branch outcomes of "
-                      "Proto-Uralic *s and the branch vowel systems. The loan therefore post-dates or "
-                      "coincides with branch formation rather than being a single unaltered proto-form, "
-                      "supporting a node that had already begun to diversify by contact time."),
+            "point": ("The one loan surfaces with each branch's regular phonology (the differing "
+                      "outcomes of Proto-Uralic *s and the branch vowel systems). This CHARACTERISES "
+                      "the item and shows it is fully integrated into every branch -- but it does NOT, "
+                      "on its own, date the borrowing relative to branch divergence: inheritance from a "
+                      "unified ancestor and borrowing into already-separated branches BOTH yield regular "
+                      "reflexes. Included for description, not as evidence for the minimum-age direction "
+                      "(see constraint_direction_reasoning and the Direction sensitivity caveat)."),
         },
         "empirical_distribution": empirical,
         "caveats_and_sensitivity": caveats,
         "one_line_summary": (
             "The Indo-Iranian (Proto-Indo-Iranian, ~4000 BP) loan layer is shared across all six "
-            "Finno-Ugric branches but essentially absent from Samoyedic and shows branch-specific "
-            "reflexes; it therefore places a MINIMUM age of ~4000 BP on the Finno-Ugric crown node "
-            "(deeper than any branch proto-language, shallower than Proto-Uralic)."),
+            "Finno-Ugric branches but essentially absent from Samoyedic, and -- distributed patchily "
+            "over branch-subsets rather than as one uniform pan-branch stratum -- is read as areal "
+            "contact with an already-differentiating Finno-Ugric; it therefore places a MINIMUM age of "
+            "~4000 BP on the Finno-Ugric crown node (deeper than any branch proto-language, shallower "
+            "than Proto-Uralic). The minimum-vs-maximum direction is interpretation-dependent (see "
+            "caveats)."),
     }
 
     with open(os.path.join(cfg.ARTIFACTS_DIR, "calibration_scheme.json"), "w") as f:
@@ -293,7 +339,7 @@ def run():
         w.writerow(["cogset", "meaning", "n_subgroups", "subgroups", "likelihood", "languages"])
         for c, subs in widest:
             w.writerow([c, params[c.split("-")[0]]["Name"], len(subs), "; ".join(subs),
-                        cogset_lik[c], "; ".join(sorted(cogset_langs[c]))])
+                        lik_label(c), "; ".join(sorted(cogset_langs[c]))])
 
     print("[stage5] II-layer records:", len(layer_records), "| core:", len(core))
     print("[stage5] core II by subgroup:", dict(core_by_subgroup))

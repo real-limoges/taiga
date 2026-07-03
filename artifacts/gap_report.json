@@ -7,9 +7,9 @@
   },
   "gap_marker_total": 481,
   "gap_coding_policy": {
+    "[Form not found]": "missing",
     "[Not reconstructable]": "missing",
-    "[No equivalent]": "absent",
-    "[Form not found]": "missing"
+    "[No equivalent]": "absent"
   },
   "status_census_per_language_meaning": {
     "present": 7929,

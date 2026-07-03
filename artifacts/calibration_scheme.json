@@ -76,7 +76,7 @@
     "anchor_age_years_BP": 4000,
     "anchor_age_basis": "Proto-Indo-Iranian is dated to c. 2000 BCE on independent archaeological (Sintashta c. 2100-1800 BCE, early Andronovo horizon) and historical-linguistic grounds; c. 2000 BCE ~= 4000 years before present.",
     "constraint_type": "minimum_age (hard lower bound)",
-    "constraint_direction_reasoning": "The loans entered branches that had ALREADY begun their own sound changes (they surface with regular BRANCH-SPECIFIC reflexes, not one uniform proto-form), so the Finno-Ugric crown had already split into its daughter branches by the time of contact. Therefore the crown's divergence PRE-DATES the contact: age(FU crown) >= age(contact) ~= 4000 BP. This is a lower bound, not a point age.",
+    "constraint_direction_reasoning": "Direction (minimum vs maximum) turns on whether the loans entered BEFORE or AFTER Finno-Ugric began to diverge. We adopt the MINIMUM (lower-bound) reading, resting it on the DISTRIBUTIONAL HETEROGENEITY of the layer, not on sound reflexes: most core Indo-Iranian loans reach only a SUBSET of branches (e.g. 'good' 57-b Saami/Mordvin/Mari/Permic; 'green' 138-a Finnic/Mari/Permic; 'sister' 279-a Mordvin/Permic; 'root' 9-c Mordvin/Saami), which is the signature of prolonged areal contact with an ALREADY-DIFFERENTIATING dialect network rather than a single borrowing into one unified proto-language (which would give uniform pan-branch distribution). If the branches were already separating when they took up the layer, their common ancestor (the FU crown) had already split by contact, so age(FU crown) >= age(contact) ~= 4000 BP. IMPORTANT HONEST CAVEAT: regular branch-specific SOUND reflexes do NOT by themselves settle the direction -- a word borrowed into an undivided ancestor and then inherited acquires each branch's regular reflexes too. The single pan-distributed item 'horn' 40-a (reconstructible to one form *sarwi with regular reflexes in every branch) is in fact equally consistent with borrowing into a still-unified ancestor, which would make ~4000 BP a MAXIMUM. We therefore do NOT rest the minimum reading on any single etymon; see the 'Direction sensitivity' caveat. A minimum-age bound is also the more conservative calibration choice.",
     "constraint_value_years_BP": 4000,
     "not_proto_uralic_because": "The clear/core Indo-Iranian loans are confined to Finno-Ugric and are essentially absent from Samoyedic. The handful of Samoyed-touching records do not pattern as clean vertical inheritance (see caveats), so the contact does not reach below the Samoyed split, i.e. not the Uralic root.",
     "deeper_than_branch_protolanguages_because": "The same loan layer is shared ACROSS the Finno-Ugric branches (Finnic, Saami, Mordvin, Mari, Permic, Ugric), so it constrains their common ancestor, which is deeper than any single branch proto-language (Proto-Finnic, Proto-Saami, ...)."
@@ -110,14 +110,14 @@
   "branch_specific_reflex_evidence": {
     "example_set": "40-a 'horn' (Indo-Iranian loan)",
     "reflexes_by_subgroup": {
-      "Finnic": "sɔ̄ra",
-      "Mari": "šur",
-      "Mordvin": "śuro",
-      "Permic": "śur",
-      "Saami": "čuerr’v",
-      "Ugric": "szarv"
+      "Saami": "čoarvi (North Saami)",
+      "Finnic": "sarvi (Standard Finnish)",
+      "Mordvin": "śuro (Erzya)",
+      "Mari": "šur (Meadow Mari)",
+      "Permic": "śur (Komi-Zyrian)",
+      "Ugric": "szarv (Hungarian)"
     },
-    "point": "The one loan surfaces as Finnic sarvi, Saami coarvi, Mari sur, Mordvin suro, Permic sur, Ugric (Hung.) szarv: the regular, DIFFERING per-branch outcomes of Proto-Uralic *s and the branch vowel systems. The loan therefore post-dates or coincides with branch formation rather than being a single unaltered proto-form, supporting a node that had already begun to diversify by contact time."
+    "point": "The one loan surfaces with each branch's regular phonology (the differing outcomes of Proto-Uralic *s and the branch vowel systems). This CHARACTERISES the item and shows it is fully integrated into every branch -- but it does NOT, on its own, date the borrowing relative to branch divergence: inheritance from a unified ancestor and borrowing into already-separated branches BOTH yield regular reflexes. Included for description, not as evidence for the minimum-age direction (see constraint_direction_reasoning and the Direction sensitivity caveat)."
   },
   "empirical_distribution": {
     "ii_layer_labels_used": {
@@ -337,7 +337,7 @@
           "Permic"
         ],
         "n_subgroups": 3,
-        "likelihood": "clear",
+        "likelihood": "probable..clear",
         "languages": [
           "Erzya",
           "Meadow Mari",
@@ -428,10 +428,10 @@
       "effect_on_call": "Ugric retained inside the calibrated clade."
     },
     {
-      "issue": "Direction sensitivity",
-      "detail": "If one instead judged the loans to have entered a still-UNDIVIDED proto-language, the same 4000 BP date would become a MAXIMUM (upper) bound on that node. We follow the phonological evidence (regular branch-specific reflexes) that the branches were already differentiating, which makes 4000 BP a MINIMUM on the FU crown.",
-      "effect_on_call": "Determines lower- vs upper-bound; we use lower bound."
+      "issue": "Direction sensitivity (minimum vs maximum) -- the main limitation",
+      "detail": "Regular branch-specific sound reflexes do NOT discriminate the two scenarios: a word borrowed into an undivided ancestor and then inherited would show the same regular per-branch correspondences as one borrowed into already-separated branches. The flagship pan-distributed item 'horn' 40-a even fits the UNDIVIDED-ancestor reading (single reconstructible *sarwi, all branches), under which ~4000 BP would be a MAXIMUM, not a minimum. We adopt the MINIMUM reading on the strength of the LAYER's distributional heterogeneity (most core loans reach only a subset of branches -> areal spread across an already-differentiating network) plus the conservatism of a lower bound -- NOT on the reflex pattern of any single etymon. An analyst who reads the layer as pre-divergence should flip this to a maximum-age bound on the same node.",
+      "effect_on_call": "Determines lower- vs upper-bound; we use a lower bound but flag this as interpretive."
     }
   ],
-  "one_line_summary": "The Indo-Iranian (Proto-Indo-Iranian, ~4000 BP) loan layer is shared across all six Finno-Ugric branches but essentially absent from Samoyedic and shows branch-specific reflexes; it therefore places a MINIMUM age of ~4000 BP on the Finno-Ugric crown node (deeper than any branch proto-language, shallower than Proto-Uralic)."
+  "one_line_summary": "The Indo-Iranian (Proto-Indo-Iranian, ~4000 BP) loan layer is shared across all six Finno-Ugric branches but essentially absent from Samoyedic, and -- distributed patchily over branch-subsets rather than as one uniform pan-branch stratum -- is read as areal contact with an already-differentiating Finno-Ugric; it therefore places a MINIMUM age of ~4000 BP on the Finno-Ugric crown node (deeper than any branch proto-language, shallower than Proto-Uralic). The minimum-vs-maximum direction is interpretation-dependent (see caveats)."
 }
