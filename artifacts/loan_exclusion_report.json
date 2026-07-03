@@ -19,5 +19,6 @@
   "excluded_sets_informative_ge2_langs": 340,
   "kept_sets": 3452,
   "cell_recodes_in_kept_sets": 76,
-  "singleton_external_loans_kept": 392
+  "singleton_external_loans_kept": 392,
+  "all_loan_flagged_cells_for_aggressive_variant": 2184
 }

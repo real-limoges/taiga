@@ -68,9 +68,16 @@ bottom of each section. This is a lab notebook, not polished prose.
   exclusion removes ~367 informative characters = the horizontal-transfer signal.
 - Dropped-as-constant chars are the ultra-stable pan-Uralic roots: 'I' 14-a,
   'eye' 84-a, 'two' 196-a, 'we' 201-a (and in baseline 'name' 16-a). Reassuring.
-- Emit Nexus (`datatype=Standard SYMBOLS="01"`) + CSV for both variants, with a
+- Emit Nexus (`datatype=Standard SYMBOLS="01"`) + CSV for each variant, with a
   per-meaning CHARSET block. Note ascertainment: only variable characters remain
   → use BEAST2 binary model with ascertainment-bias correction.
+- **Added a third variant (post-review request): `aggressive_inherited_only`** —
+  no loan-flagged form counts as a presence (every borrowed cell, external and
+  intra-Uralic, singletons and PU* included, forced to `?`). 3028 chars (994
+  informative), 764 dropped. Not strictly nested with `default`: aggressive keeps
+  inherited members of mixed sets but strips all borrowed cells, so it has
+  slightly more informative characters than default despite fewer total. Stage 3
+  now emits `all_loan_cells` (the full per-cell loan map) to drive it.
 
 ## 5. Calibration (Stage 5) — the crux
 

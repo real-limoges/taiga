@@ -15,6 +15,7 @@ stages/                  re-runnable curation pipeline (stage0..stage5, run_all)
 artifacts/               all generated outputs
   cognate_matrix.nex/csv          <- the DEFAULT (loan-excluded) matrix
   cognate_matrix_baseline_*        <- no-loan-exclusion comparison
+  cognate_matrix_aggressive_*      <- inherited-only (every loan-flagged form removed)
   calibration_scheme.json          <- the calibration deliverable
   loanword_exclusions.csv          <- every excluded loan set, with reasons
   gap_report.{json,csv}            <- gap-marker handling
@@ -34,7 +35,9 @@ python3 stages/run_all.py     # regenerates everything under artifacts/ (stdlib 
 
 - **Matrix:** 27 taxa × 3,448 binary characters (983 parsimony-informative);
   loan exclusion removes ~367 informative horizontal-transfer characters vs the
-  baseline.
+  baseline (3,787). An aggressive inherited-only variant (3,028 chars) is also
+  provided for sensitivity checks. See `artifacts/SCHEMA.md` A.1 for the three
+  variants.
 - **Gaps:** `[No equivalent]` → structural absence; `[Form not found]` /
   `[Not reconstructable]` → missing. 481 gaps handled explicitly.
 - **Loans:** 340 cognate sets excluded as horizontal transfer (documented

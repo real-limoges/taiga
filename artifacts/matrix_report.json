@@ -67,6 +67,67 @@
       ],
       "nexus": "artifacts/cognate_matrix_baseline_noexclusion.nex",
       "csv": "artifacts/cognate_matrix_baseline_noexclusion.csv"
+    },
+    "aggressive_inherited_only": {
+      "n_taxa": 27,
+      "n_characters": 3028,
+      "n_parsimony_informative": 994,
+      "n_singleton_autapomorphies": 2034,
+      "n_dropped_characters": 764,
+      "dropped_examples": [
+        {
+          "cogset": "3-e",
+          "meaning": "go",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "4-a",
+          "meaning": "water",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "8-f",
+          "meaning": "bone",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "9-b",
+          "meaning": "root",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "9-g",
+          "meaning": "root",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "11-c",
+          "meaning": "come",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "12-e",
+          "meaning": "breast",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "13-c",
+          "meaning": "rain",
+          "reason": "no observed presence after coding (all 0/?)"
+        },
+        {
+          "cogset": "14-a",
+          "meaning": "I",
+          "reason": "constant present in all taxa (uninformative)"
+        },
+        {
+          "cogset": "15-b",
+          "meaning": "louse",
+          "reason": "no observed presence after coding (all 0/?)"
+        }
+      ],
+      "nexus": "artifacts/cognate_matrix_aggressive_inherited_only.nex",
+      "csv": "artifacts/cognate_matrix_aggressive_inherited_only.csv"
     }
   }
 }

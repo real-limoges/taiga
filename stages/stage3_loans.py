@@ -70,9 +70,30 @@ def run():
 
     decisions = {}          # cogset -> decision dict (consumed by Stage 4)
     exclusion_rows = []      # for loanword_exclusions.csv
-    recode_cells = []        # (cogset, language_id) -> recode to '?'
+    recode_cells = []        # DEFAULT policy: loan cells recoded to '?' in kept multi-lang sets
+    all_loan_cells = []      # AGGRESSIVE policy: EVERY loan-flagged cell (any set, any lang incl. PU*)
     cat_counter = collections.Counter()
     singleton_external = []
+
+    # AGGRESSIVE-policy input: every loan-flagged (cogset, language) cell, over ALL
+    # sets and ALL languages including Proto-Uralic*, at any likelihood. Used by the
+    # Stage 4 "aggressive_inherited_only" matrix, which lets no loan-flagged form
+    # count as a presence.
+    for cog, fl in set_forms.items():
+        for f in fl:
+            recs = loans_by_form.get(f["ID"], [])
+            if not recs:
+                continue
+            srcs = sorted({lr["source"] for lr in recs})
+            cls = "inherited"
+            for lr in recs:
+                c = "external" if lr["class"] in ("external", "ambiguous") else \
+                    ("uralic" if lr["class"] == "uralic" else "inherited")
+                if ORDER[c] > ORDER[cls]:
+                    cls = c
+            if cls in ("external", "uralic"):
+                all_loan_cells.append({"cogset": cog, "language_id": f["Language_ID"],
+                                       "status": cls, "sources": srcs})
 
     for cog, fl in set_forms.items():
         meaning = params[cog.split("-")[0]]["Name"]
@@ -196,9 +217,11 @@ def run():
         "kept_sets": n_total - n_excluded,
         "cell_recodes_in_kept_sets": len(recode_cells),
         "singleton_external_loans_kept": len(singleton_external),
+        "all_loan_flagged_cells_for_aggressive_variant": len(all_loan_cells),
     }
     with open(os.path.join(cfg.INTERMEDIATE_DIR, "stage3_loans.json"), "w") as f:
         json.dump({"decisions": decisions, "recode_cells": recode_cells,
+                   "all_loan_cells": all_loan_cells,
                    "singleton_external": singleton_external, "report": report}, f)
     with open(os.path.join(cfg.ARTIFACTS_DIR, "loan_exclusion_report.json"), "w") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)

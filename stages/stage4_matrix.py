@@ -36,8 +36,16 @@ def _safe_taxon(name):
     return out
 
 
-def build_matrix(tables, status, decisions, recode_set, apply_loans):
-    """Return (taxa, char_meta, matrix rows dict lid->list, dropped) for one variant."""
+def build_matrix(tables, status, decisions, recode_set, pre_exclude):
+    """Return (taxa, char_meta, matrix rows dict lid->list, dropped) for one variant.
+
+    pre_exclude : if True, drop whole cognate sets flagged excluded by Stage 3
+                  (DEFAULT policy). If False, keep every real set and let cell
+                  recoding + the empty-character filter remove loan material
+                  (BASELINE uses an empty recode_set; AGGRESSIVE uses the full
+                  loan-cell set).
+    recode_set  : set of (cogset, language_id) cells forced to '?'.
+    """
     forms = tables["forms"]
     params = {p["ID"]: p for p in tables["parameters"]}
     varieties = tables["varieties"]
@@ -55,7 +63,7 @@ def build_matrix(tables, status, decisions, recode_set, apply_loans):
 
     # Which cognate sets are characters in this variant?
     all_sets = sorted(set_langs, key=lambda c: (int(c.split("-")[0]), c))
-    if apply_loans:
+    if pre_exclude:
         char_sets = [c for c in all_sets if not decisions[c]["excluded"]]
     else:
         char_sets = list(all_sets)
@@ -72,7 +80,7 @@ def build_matrix(tables, status, decisions, recode_set, apply_loans):
             key = f"{lid}|{meaning_pid}"
             s = status.get(key, "no_row")
             member = lid in set_langs[cog]
-            recoded = apply_loans and ((cog, lid) in recode_set)
+            recoded = (cog, lid) in recode_set
             if member and not recoded:
                 col[lid] = "1"
             elif recoded:
@@ -166,19 +174,27 @@ def run():
     with open(os.path.join(cfg.INTERMEDIATE_DIR, "stage3_loans.json")) as f:
         s3 = json.load(f)
     decisions = s3["decisions"]
-    recode_set = {(r["cogset"], r["language_id"]) for r in s3["recode_cells"]}
+    default_recode = {(r["cogset"], r["language_id"]) for r in s3["recode_cells"]}
+    aggressive_recode = {(r["cogset"], r["language_id"]) for r in s3["all_loan_cells"]}
     varieties = tables["varieties"]
 
     report = {"stage": "stage4_matrix", "variants": {}}
 
-    for variant, apply_loans in [("default_loan_excluded", True), ("baseline_no_exclusion", False)]:
+    # (variant key, file suffix, pre_exclude, recode_set, title)
+    variants = [
+        ("default_loan_excluded", "", True, default_recode,
+         "UraLex 2.0 Uralic cognate matrix — loan-excluded (DEFAULT)"),
+        ("baseline_no_exclusion", "_baseline_noexclusion", False, set(),
+         "UraLex 2.0 Uralic cognate matrix — baseline, no loan exclusion"),
+        ("aggressive_inherited_only", "_aggressive_inherited_only", False, aggressive_recode,
+         "UraLex 2.0 Uralic cognate matrix — aggressive, inherited-only "
+         "(every loan-flagged form removed)"),
+    ]
+    for variant, suffix, pre_exclude, recode_set, title in variants:
         lang_ids, char_meta, matrix, dropped = build_matrix(
-            tables, status, decisions, recode_set, apply_loans)
-        suffix = "" if variant == "default_loan_excluded" else "_baseline_noexclusion"
+            tables, status, decisions, recode_set, pre_exclude)
         nex = os.path.join(cfg.ARTIFACTS_DIR, f"cognate_matrix{suffix}.nex")
         csvp = os.path.join(cfg.ARTIFACTS_DIR, f"cognate_matrix{suffix}.csv")
-        title = ("UraLex 2.0 Uralic cognate matrix — loan-excluded (DEFAULT)"
-                 if apply_loans else "UraLex 2.0 Uralic cognate matrix — baseline, no loan exclusion")
         write_nexus(nex, varieties, char_meta, matrix, title)
         write_csv(csvp, varieties, char_meta, matrix)
 
