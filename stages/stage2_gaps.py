@@ -99,7 +99,7 @@ def run():
         "stage": "stage2_gaps",
         "gap_marker_counts": dict(gap_counter),
         "gap_marker_total": sum(gap_counter.values()),
-        "gap_coding_policy": {k: cfg.GAP_CODING[k] for k in cfg.GAP_MARKERS},
+        "gap_coding_policy": {k: cfg.GAP_CODING[k] for k in sorted(cfg.GAP_MARKERS)},
         "status_census_per_language_meaning": dict(status_census),
         "implicit_missing_cells_no_row": implicit_missing,
         "examples_per_marker": {k: v for k, v in per_marker_examples.items()},
