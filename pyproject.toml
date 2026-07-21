@@ -1,0 +1,55 @@
+[project]
+name = "taiga"
+version = "0.1.0"
+description = "Staged analysis pipeline over the UraLex CLDF dataset"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Real Limoges", email = "b.real.limoges@gmail.com" }]
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = ["ruff>=0.6", "ty>=0.0.1a1"]
+
+# The stages are run as scripts (`python3 stages/stage1_load.py`), not imported
+# as an installed package, so there is nothing to build.
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["stages"]
+extend-exclude = ["data", "artifacts"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "RUF",
+    # PTH (prefer pathlib) is deliberately off: the stages are written in a
+    # plain os.path style and there is no reason to churn them.
+]
+ignore = [
+    "E501",  # line length is handled by the formatter
+    "E402",  # stages prepend their own dir to sys.path before importing siblings
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["stage0_config"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ty.environment]
+python-version = "3.11"
+root = ["stages"]
+
+[tool.ty.src]
+include = ["stages"]
+exclude = ["data", "artifacts"]
