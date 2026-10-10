@@ -1,0 +1,437 @@
+{
+  "title": "UraLex 2.0 — Indo-Iranian contact-layer calibration for Uralic (BEAST2)",
+  "generated_by": "stages/stage5_calibration.py (no inference performed)",
+  "dataset": {
+    "name": "UraLex",
+    "version": "2.0",
+    "commit": "0ce4fc7ea8147c9b3175b786eccf87d3a1c7f7e1",
+    "doi": "10.5281/zenodo.4777568"
+  },
+  "calibrated_node": {
+    "node_label": "Proto-Finno-Ugric (Finno-Ugric crown)",
+    "definition": "Most recent common ancestor (MRCA) of all sampled Uralic varieties EXCEPT the Samoyedic branch; i.e. the node uniting Finnic + Saami + Mordvin + Mari + Permic + Ugric.",
+    "mrca_taxon_set": [
+      "South Saami",
+      "Ume Saami",
+      "Pite Saami",
+      "North Saami",
+      "Inari Saami",
+      "Skolt Saami",
+      "Kildin Saami",
+      "Standard Finnish",
+      "Karelian Proper",
+      "Veps",
+      "Ingrian",
+      "Western Votic",
+      "Standard Estonian",
+      "Võro South Estonian",
+      "Courland Livonian",
+      "Erzya",
+      "Meadow Mari",
+      "Komi-Zyrian",
+      "Komi-Permyak",
+      "Udmurt",
+      "Hungarian",
+      "Sosva Mansi",
+      "Vakh-Vasyugan Khanty"
+    ],
+    "excluded_from_taxon_set": [
+      "Proto-Uralic* (reconstruction, sits at/above the root)",
+      "Samoyedic varieties (Nganasan, Tundra Nenets, Selkup)"
+    ],
+    "monophyly_assumption": "Requires Finno-Ugric to be monophyletic (Samoyedic as the outgroup / first split). Enforce as a monophyly constraint or define the calibration on this MRCA taxon set.",
+    "support": "The core Indo-Iranian layer reaches ALL SIX Finno-Ugric branches. Ugric's participation rests chiefly on 'horn' 40-a (probable) and 'house' 26-b (possible); no Ugric core-II loan is coded 'clear'. See the conservative alternative node for the clear-only reading."
+  },
+  "alternative_conservative_node": {
+    "node_label": "Proto-Finno-Permic (Finno-Ugric crown minus Ugric)",
+    "when_to_prefer": "Prefer this if you anchor ONLY on UraLex 'clear' loans and treat Ugric's participation in the oldest Indo-Iranian layer as unproven.",
+    "definition": "MRCA of Finnic + Saami + Mordvin + Mari + Permic (Ugric and Samoyedic excluded).",
+    "mrca_taxon_set": [
+      "South Saami",
+      "Ume Saami",
+      "Pite Saami",
+      "North Saami",
+      "Inari Saami",
+      "Skolt Saami",
+      "Kildin Saami",
+      "Standard Finnish",
+      "Karelian Proper",
+      "Veps",
+      "Ingrian",
+      "Western Votic",
+      "Standard Estonian",
+      "Võro South Estonian",
+      "Courland Livonian",
+      "Erzya",
+      "Meadow Mari",
+      "Komi-Zyrian",
+      "Komi-Permyak",
+      "Udmurt"
+    ],
+    "support": "The set of UraLex 'clear' core Indo-Iranian loans collectively spans exactly these five branches (e.g. 'good' 57-b: Saami/Mordvin/Mari/Permic; 'green' 138-a: Finnic/Mari/Permic), and none reaches Ugric or Samoyed.",
+    "effect": "Shifts the calibrated node one level shallower (drops Ugric). The ~4000 BP minimum-age bound and its direction are UNCHANGED; only which taxa bound the node moves."
+  },
+  "calibration": {
+    "anchor_event": "Proto-Indo-Iranian ('Aryan') loanword contact layer entering Finno-Ugric",
+    "anchor_age_years_BP": 4000,
+    "anchor_age_basis": "Proto-Indo-Iranian is dated to c. 2000 BCE on independent archaeological (Sintashta c. 2100-1800 BCE, early Andronovo horizon) and historical-linguistic grounds; c. 2000 BCE ~= 4000 years before present.",
+    "constraint_type": "minimum_age (hard lower bound)",
+    "constraint_direction_reasoning": "Direction (minimum vs maximum) turns on whether the loans entered BEFORE or AFTER Finno-Ugric began to diverge. We adopt the MINIMUM (lower-bound) reading, resting it on the DISTRIBUTIONAL HETEROGENEITY of the layer, not on sound reflexes: most core Indo-Iranian loans reach only a SUBSET of branches (e.g. 'good' 57-b Saami/Mordvin/Mari/Permic; 'green' 138-a Finnic/Mari/Permic; 'sister' 279-a Mordvin/Permic; 'root' 9-c Mordvin/Saami), which is the signature of prolonged areal contact with an ALREADY-DIFFERENTIATING dialect network rather than a single borrowing into one unified proto-language (which would give uniform pan-branch distribution). If the branches were already separating when they took up the layer, their common ancestor (the FU crown) had already split by contact, so age(FU crown) >= age(contact) ~= 4000 BP. IMPORTANT HONEST CAVEAT: regular branch-specific SOUND reflexes do NOT by themselves settle the direction -- a word borrowed into an undivided ancestor and then inherited acquires each branch's regular reflexes too. The single pan-distributed item 'horn' 40-a (reconstructible to one form *sarwi with regular reflexes in every branch) is in fact equally consistent with borrowing into a still-unified ancestor, which would make ~4000 BP a MAXIMUM. We therefore do NOT rest the minimum reading on any single etymon; see the 'Direction sensitivity' caveat. A minimum-age bound is also the more conservative calibration choice.",
+    "constraint_value_years_BP": 4000,
+    "not_proto_uralic_because": "The clear/core Indo-Iranian loans are confined to Finno-Ugric and are essentially absent from Samoyedic. The handful of Samoyed-touching records do not pattern as clean vertical inheritance (see caveats), so the contact does not reach below the Samoyed split, i.e. not the Uralic root.",
+    "deeper_than_branch_protolanguages_because": "The same loan layer is shared ACROSS the Finno-Ugric branches (Finnic, Saami, Mordvin, Mari, Permic, Ugric), so it constrains their common ancestor, which is deeper than any single branch proto-language (Proto-Finnic, Proto-Saami, ...)."
+  },
+  "beast2_prior": {
+    "target": "tmrca of the Finno-Ugric crown node (see mrca_taxon_set)",
+    "interpretation": "node age (time before present) >= 4000 years; true age older, tail open",
+    "recommended_prior": {
+      "distribution": "Exponential",
+      "offset_years_BP": 4000,
+      "mean_years_above_offset": 1500,
+      "note": "Hard minimum at 4000 BP with a decaying tail into older ages; encodes 'at least 4000, probably somewhat older, no hard maximum'. Mean above offset is a soft modelling choice, not derived from the loan evidence."
+    },
+    "alternatives": [
+      {
+        "distribution": "Uniform",
+        "lower_years_BP": 4000,
+        "upper_years_BP": 8000,
+        "note": "Non-committal minimum; upper bound is an arbitrary loose cap, adjust to taste."
+      },
+      {
+        "distribution": "Lognormal",
+        "offset_years_BP": 4000,
+        "note": "Use if you want most mass just above the bound with a long right tail."
+      }
+    ],
+    "caution": "Do NOT encode this as a point age or a two-sided normal centred on 4000: the evidence gives a floor, not an estimate, of the node's age.",
+    "ascertainment_note": "The matrix contains only observed/variable cognate characters (constant-in-all-taxa characters were dropped); use BEAST2's binary model with ascertainment-bias correction accordingly.",
+    "proto_uralic_tip_note": "Proto-Uralic* is a partial reconstruction, not a contemporaneous tip. Prefer treating it as an ancestral/root constraint or drop it from tip-dating rather than dating it as a leaf."
+  },
+  "branch_specific_reflex_evidence": {
+    "example_set": "40-a 'horn' (Indo-Iranian loan)",
+    "reflexes_by_subgroup": {
+      "Saami": "čoarvi (North Saami)",
+      "Finnic": "sarvi (Standard Finnish)",
+      "Mordvin": "śuro (Erzya)",
+      "Mari": "šur (Meadow Mari)",
+      "Permic": "śur (Komi-Zyrian)",
+      "Ugric": "szarv (Hungarian)"
+    },
+    "point": "The one loan surfaces with each branch's regular phonology (the differing outcomes of Proto-Uralic *s and the branch vowel systems). This CHARACTERISES the item and shows it is fully integrated into every branch -- but it does NOT, on its own, date the borrowing relative to branch divergence: inheritance from a unified ancestor and borrowing into already-separated branches BOTH yield regular reflexes. Included for description, not as evidence for the minimum-age direction (see constraint_direction_reasoning and the Direction sensitivity caveat)."
+  },
+  "empirical_distribution": {
+    "ii_layer_labels_used": {
+      "core_indo_iranian": [
+        "Indo-Iranian",
+        "Indo-Iranian_or_Iranian",
+        "Indo_Iranian_or_Iranian"
+      ],
+      "indo_iranian_or_wider_ie": [
+        "Indo-Iranian_or_Indo-European"
+      ],
+      "later_iranian": [
+        "Iranian",
+        "West Old Turkic_or_Iranian"
+      ]
+    },
+    "total_ii_layer_borrowing_records": 253,
+    "ii_layer_records_by_subgroup": {
+      "Permic": 60,
+      "Ugric": 22,
+      "Mordvin": 15,
+      "Mari": 15,
+      "Finnic": 86,
+      "Samoyed": 3,
+      "Saami": 51,
+      "(reconstr.)": 1
+    },
+    "core_indo_iranian_records": 159,
+    "core_by_subgroup": {
+      "Mordvin": 10,
+      "Mari": 14,
+      "Finnic": 57,
+      "Samoyed": 2,
+      "Permic": 37,
+      "Ugric": 6,
+      "Saami": 32,
+      "(reconstr.)": 1
+    },
+    "core_subgroups_reached": [
+      "Finnic",
+      "Mari",
+      "Mordvin",
+      "Permic",
+      "Saami",
+      "Samoyed",
+      "Ugric"
+    ],
+    "clear_core_subgroups_reached": [
+      "Finnic",
+      "Mari",
+      "Mordvin",
+      "Permic",
+      "Saami"
+    ],
+    "core_subgroups_by_likelihood": {
+      "clear": [
+        "Finnic",
+        "Mari",
+        "Mordvin",
+        "Permic",
+        "Saami"
+      ],
+      "probable": [
+        "Finnic",
+        "Mari",
+        "Mordvin",
+        "Permic",
+        "Saami",
+        "Samoyed",
+        "Ugric"
+      ],
+      "possible": [
+        "Finnic",
+        "Mari",
+        "Mordvin",
+        "Permic",
+        "Saami",
+        "Ugric"
+      ]
+    },
+    "core_cross_branch_cognate_sets": 13,
+    "widest_core_ii_sets": [
+      {
+        "cogset": "40-a",
+        "meaning": "horn",
+        "subgroups": [
+          "Finnic",
+          "Mari",
+          "Mordvin",
+          "Permic",
+          "Saami",
+          "Ugric"
+        ],
+        "n_subgroups": 6,
+        "likelihood": "probable",
+        "languages": [
+          "Courland Livonian",
+          "Erzya",
+          "Hungarian",
+          "Inari Saami",
+          "Ingrian",
+          "Karelian Proper",
+          "Kildin Saami",
+          "Komi-Permyak",
+          "Komi-Zyrian",
+          "Meadow Mari",
+          "North Saami",
+          "Pite Saami",
+          "Skolt Saami",
+          "South Saami",
+          "Standard Estonian",
+          "Standard Finnish",
+          "Udmurt",
+          "Ume Saami",
+          "Veps",
+          "Võro South Estonian",
+          "Western Votic"
+        ]
+      },
+      {
+        "cogset": "231-b",
+        "meaning": "fox",
+        "subgroups": [
+          "Finnic",
+          "Mari",
+          "Mordvin",
+          "Permic"
+        ],
+        "n_subgroups": 4,
+        "likelihood": "probable",
+        "languages": [
+          "Courland Livonian",
+          "Erzya",
+          "Ingrian",
+          "Karelian Proper",
+          "Komi-Permyak",
+          "Komi-Zyrian",
+          "Meadow Mari",
+          "Standard Estonian",
+          "Udmurt",
+          "Veps",
+          "Võro South Estonian",
+          "Western Votic"
+        ]
+      },
+      {
+        "cogset": "57-b",
+        "meaning": "good",
+        "subgroups": [
+          "Mari",
+          "Mordvin",
+          "Permic",
+          "Saami"
+        ],
+        "n_subgroups": 4,
+        "likelihood": "clear",
+        "languages": [
+          "Erzya",
+          "Inari Saami",
+          "Kildin Saami",
+          "Komi-Permyak",
+          "Komi-Zyrian",
+          "Meadow Mari",
+          "North Saami",
+          "Pite Saami",
+          "Skolt Saami",
+          "South Saami",
+          "Ume Saami"
+        ]
+      },
+      {
+        "cogset": "138-a",
+        "meaning": "green",
+        "subgroups": [
+          "Finnic",
+          "Mari",
+          "Permic"
+        ],
+        "n_subgroups": 3,
+        "likelihood": "clear",
+        "languages": [
+          "Karelian Proper",
+          "Komi-Zyrian",
+          "Meadow Mari",
+          "Standard Finnish",
+          "Udmurt",
+          "Veps",
+          "Western Votic"
+        ]
+      },
+      {
+        "cogset": "26-b",
+        "meaning": "house",
+        "subgroups": [
+          "Finnic",
+          "Mordvin",
+          "Ugric"
+        ],
+        "n_subgroups": 3,
+        "likelihood": "possible",
+        "languages": [
+          "Courland Livonian",
+          "Erzya",
+          "Hungarian",
+          "Ingrian",
+          "Vakh-Vasyugan Khanty",
+          "Veps",
+          "Western Votic"
+        ]
+      },
+      {
+        "cogset": "279-a",
+        "meaning": "sister",
+        "subgroups": [
+          "Mari",
+          "Mordvin",
+          "Permic"
+        ],
+        "n_subgroups": 3,
+        "likelihood": "probable..clear",
+        "languages": [
+          "Erzya",
+          "Meadow Mari",
+          "Udmurt"
+        ]
+      },
+      {
+        "cogset": "13-a",
+        "meaning": "rain",
+        "subgroups": [
+          "Finnic",
+          "Samoyed"
+        ],
+        "n_subgroups": 2,
+        "likelihood": "probable",
+        "languages": [
+          "Courland Livonian",
+          "Ingrian",
+          "Karelian Proper",
+          "Selkup",
+          "Standard Estonian",
+          "Standard Finnish",
+          "Tundra Nenets",
+          "Veps"
+        ]
+      },
+      {
+        "cogset": "162-b",
+        "meaning": "rightside",
+        "subgroups": [
+          "Finnic",
+          "Permic"
+        ],
+        "n_subgroups": 2,
+        "likelihood": "possible",
+        "languages": [
+          "Standard Estonian",
+          "Udmurt"
+        ]
+      }
+    ],
+    "samoyed_ii_layer_records": [
+      {
+        "language": "Tundra Nenets",
+        "meaning": "rain",
+        "cogset": "13-a",
+        "source": "Indo-Iranian",
+        "likelihood": "probable",
+        "layer": "core_indo_iranian"
+      },
+      {
+        "language": "Selkup",
+        "meaning": "rain",
+        "cogset": "13-a",
+        "source": "Indo-Iranian",
+        "likelihood": "probable",
+        "layer": "core_indo_iranian"
+      },
+      {
+        "language": "Selkup",
+        "meaning": "salt",
+        "cogset": "94-d",
+        "source": "Iranian",
+        "likelihood": "probable",
+        "layer": "later_iranian"
+      }
+    ]
+  },
+  "caveats_and_sensitivity": [
+    {
+      "issue": "Samoyed 'rain' set 13-a (Finnic + Samoyed only)",
+      "detail": "An Indo-Iranian-flagged set reaches Finnic and Samoyed but SKIPS every intermediate Finno-Ugric branch (Saami, Mordvin, Mari, Permic, Ugric). A single borrowing into undivided Proto-Uralic would predict intermediate reflexes; their absence makes parallel/areal borrowing or a Wanderwort more likely. Marked 'probable', and the Nganasan form is not even loan-flagged. Hence it does not license a Proto-Uralic-level (Samoyed-inclusive) calibration.",
+      "effect_on_call": "Does not move the node below the Samoyed split."
+    },
+    {
+      "issue": "Selkup 'salt' 94-d (Iranian, single language)",
+      "detail": "A single-language, later-'Iranian' (post-split) loan into Selkup; younger layer, irrelevant to the deep node.",
+      "effect_on_call": "None."
+    },
+    {
+      "issue": "UraLex Proto-Uralic* reconstructions attached to II-loan sets (e.g. 40-a *sarwi)",
+      "detail": "The compilers attach a Proto-Uralic* reconstruction to some II-loan etyma. This reflects their maximal etymological depth judgement, not proof of Samoyed-inclusive inheritance; the attested reflex distribution (absent from Samoyed) is the primary signal used here.",
+      "effect_on_call": "Node kept at FU crown, not Uralic root."
+    },
+    {
+      "issue": "Ugric 'Iranian' (not core Indo-Iranian) loans",
+      "detail": "Hungarian in particular has famous LATER Iranian/Alanic loans. Those are excluded from the core-II anchor; Ugric still participates in the core Indo-Iranian layer (e.g. shares 'horn' 40-a and 'house' 26-b), so the crown remains inclusive of Ugric.",
+      "effect_on_call": "Ugric retained inside the calibrated clade."
+    },
+    {
+      "issue": "Direction sensitivity (minimum vs maximum) -- the main limitation",
+      "detail": "Regular branch-specific sound reflexes do NOT discriminate the two scenarios: a word borrowed into an undivided ancestor and then inherited would show the same regular per-branch correspondences as one borrowed into already-separated branches. The flagship pan-distributed item 'horn' 40-a even fits the UNDIVIDED-ancestor reading (single reconstructible *sarwi, all branches), under which ~4000 BP would be a MAXIMUM, not a minimum. We adopt the MINIMUM reading on the strength of the LAYER's distributional heterogeneity (most core loans reach only a subset of branches -> areal spread across an already-differentiating network) plus the conservatism of a lower bound -- NOT on the reflex pattern of any single etymon. An analyst who reads the layer as pre-divergence should flip this to a maximum-age bound on the same node.",
+      "effect_on_call": "Determines lower- vs upper-bound; we use a lower bound but flag this as interpretive."
+    }
+  ],
+  "one_line_summary": "The Indo-Iranian (Proto-Indo-Iranian, ~4000 BP) loan layer is shared across all six Finno-Ugric branches but essentially absent from Samoyedic, and -- distributed patchily over branch-subsets rather than as one uniform pan-branch stratum -- is read as areal contact with an already-differentiating Finno-Ugric; it therefore places a MINIMUM age of ~4000 BP on the Finno-Ugric crown node (deeper than any branch proto-language, shallower than Proto-Uralic). The minimum-vs-maximum direction is interpretation-dependent (see caveats)."
+}

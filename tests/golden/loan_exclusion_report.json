@@ -1,0 +1,24 @@
+{
+  "stage": "stage3_loans",
+  "policy": {
+    "exclusion_E1": ">=2 member languages carry an external (non-Uralic) loan flag",
+    "exclusion_E2": "fully-loan set (all attested members loan-flagged, >=1 external) spanning >=2 languages",
+    "kept_set_cell_recode": "loan-flagged cells in kept sets recoded to '?'",
+    "singletons": "single-language external loans KEPT (autapomorphies, no false grouping)",
+    "ambiguous_sources": "cross-boundary disjunctions (e.g. Germanic_or_Finnic) treated as external"
+  },
+  "cognate_set_categories": {
+    "pure_inherited": 2954,
+    "fully_loan": 705,
+    "ext_multi_mixed": 27,
+    "uralic_loan_only": 83,
+    "ext_single_mixed": 23
+  },
+  "total_real_cognate_sets": 3792,
+  "excluded_sets": 340,
+  "excluded_sets_informative_ge2_langs": 340,
+  "kept_sets": 3452,
+  "cell_recodes_in_kept_sets": 76,
+  "singleton_external_loans_kept": 392,
+  "all_loan_flagged_cells_for_aggressive_variant": 2184
+}
