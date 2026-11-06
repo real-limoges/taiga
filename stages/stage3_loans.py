@@ -1,5 +1,5 @@
 """
-Stage 3 — Loanword classification and horizontal-transfer exclusion.
+Stage 3: Loanword classification and horizontal-transfer exclusion.
 
 Re-runnable: `python3 stages/stage3_loans.py`
 
@@ -7,8 +7,8 @@ UraLex root-meaning sets (`Cognacy` / `Cognateset_ID`, e.g. `40-a`) already
 group forms by *inheritance*: a form borrowed from another family is placed in
 its own root-meaning set, not merged with the inherited material. What we still
 must do for phylogenetics is stop known borrowings from injecting *horizontal*
-signal — i.e. two languages sharing a cognate state because of contact, not
-common descent.
+signal: two languages sharing a cognate state because of contact, not common
+descent.
 
 We use the BorrowingTable (`borrowings.csv`) to flag, per member language of
 each cognate set, whether its form is a loan and whether the donor is external
@@ -35,10 +35,29 @@ Emits `artifacts/loanword_exclusions.csv` (every excluded set, with reason),
 `artifacts/_intermediate/stage3_loans.json` (machine-readable decisions used by
 Stage 4), and `artifacts/loan_exclusion_report.json` (summary).
 """
-import csv, json, os, sys, collections
+import collections
+import csv
+import json
+import os
+import sys
+from typing import TypedDict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import stage0_config as cfg
+
+
+class LoanDecision(TypedDict):
+    """Per-cognate-set exclusion decision, serialized for Stage 4."""
+
+    meaning: str
+    n_lang: int
+    n_external: int
+    n_uralic_loan: int
+    n_inherited: int
+    category: str
+    excluded: bool
+    reason: str | None
+    recode_to_missing_langs: list[str]
 
 
 def run():
@@ -46,7 +65,7 @@ def run():
     with open(os.path.join(cfg.INTERMEDIATE_DIR, "stage1_tables.json")) as f:
         tables = json.load(f)
     forms = {f["ID"]: f for f in tables["forms"]}
-    langmeta = {l["ID"]: l for l in tables["languages"]}
+    langmeta = {lang["ID"]: lang for lang in tables["languages"]}
     borrowings = tables["borrowings"]
     params = {p["ID"]: p for p in tables["parameters"]}
 
@@ -59,7 +78,7 @@ def run():
 
     # Build real cognate sets (skip ?/0 placeholders and gap rows).
     set_forms = collections.defaultdict(list)
-    for fid, f in forms.items():
+    for f in forms.values():
         if not cfg.cognacy_is_real(f["Cognacy"]):
             continue
         if cfg.is_gap(f["Value"]):
@@ -68,7 +87,7 @@ def run():
 
     ORDER = {"inherited": 0, "uralic": 1, "external": 2}
 
-    decisions = {}          # cogset -> decision dict (consumed by Stage 4)
+    decisions: dict[str, LoanDecision] = {}  # cogset -> decision (consumed by Stage 4)
     exclusion_rows = []      # for loanword_exclusions.csv
     recode_cells = []        # DEFAULT policy: loan cells recoded to '?' in kept multi-lang sets
     all_loan_cells = []      # AGGRESSIVE policy: EVERY loan-flagged cell (any set, any lang incl. PU*)
@@ -181,7 +200,7 @@ def run():
                 "n_languages": n_lang, "n_external_loans": n_ext,
                 "n_uralic_loans": n_ura, "n_inherited": n_inh,
                 "external_donors": "; ".join(donor_labels),
-                "languages": "; ".join(sorted(langmeta[l]["Name"] for l in per_lang)),
+                "languages": "; ".join(sorted(langmeta[lid]["Name"] for lid in per_lang)),
             })
 
     # Write exclusions CSV (sorted by meaning number then set)

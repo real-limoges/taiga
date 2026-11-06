@@ -1,5 +1,5 @@
 """
-Stage 0 — Configuration and shared helpers for the UraLex → BEAST2 pipeline.
+Stage 0: Configuration and shared helpers for the UraLex → BEAST2 pipeline.
 
 This module holds all curation *policy* in one place: paths, the set of
 Indo-Iranian donor labels used to define the contact layer, the source-language
@@ -27,26 +27,25 @@ URALEX_DOI = "10.5281/zenodo.4777568"
 # Taxa
 # ---------------------------------------------------------------------------
 # The reconstructed Proto-Uralic row uses Language_ID "0". It is a
-# *reconstruction*, not an attested variety, and is handled specially: it is
-# NOT used when classifying the loan status of a cognate set, and downstream it
-# is flagged so the user can decide whether to keep it as a tip or treat it as
-# an ancestral-node constraint.
+# *reconstruction*, not an attested variety, and is handled specially
+# - it is NOT used when classifying the loan status of a cognate set
+# - downstream it is flagged so the user can decide whether to keep it as a tip
+# or treat it as an ancestral-node constraint.
 PROTO_URALIC_ID = "0"
 
 # The traditional Uralic subgroups present in the sampled data.
 URALIC_SUBGROUPS = {"Saami", "Finnic", "Mordvin", "Mari", "Permic", "Ugric", "Samoyed"}
 
-# Finno-Ugric = every subgroup except Samoyed (Samoyed is the first split in the
-# standard tree). Used by the calibration stage to define the FU crown node.
+# Finno-Ugric = every subgroup except Samoyed
+# (Samoyed is the first split in the standard tree).
+# Used by the calibration stage to define the FU crown node.
 FINNO_UGRIC_SUBGROUPS = URALIC_SUBGROUPS - {"Samoyed"}
 
-# ---------------------------------------------------------------------------
 # Gap markers (forms.csv `Value`)
-# ---------------------------------------------------------------------------
 # Three marked gaps, with DELIBERATELY DIFFERENT downstream semantics:
-GAP_NO_EQUIVALENT = "[No equivalent]"      # concept genuinely not lexicalised -> structural ABSENCE (0)
-GAP_FORM_NOT_FOUND = "[Form not found]"    # compilers found no form -> MISSING data (?)
-GAP_NOT_RECONSTRUCTABLE = "[Not reconstructable]"  # (Proto-Uralic) not reconstructable -> MISSING data (?)
+GAP_NO_EQUIVALENT = "[No equivalent]"               # concept genuinely not lexicalized -> structural ABSENCE (0)
+GAP_FORM_NOT_FOUND = "[Form not found]"             # compilers found no form -> MISSING data (?)
+GAP_NOT_RECONSTRUCTABLE = "[Not reconstructable]"   # (Proto-Uralic) not reconstructable -> MISSING data (?)
 GAP_MARKERS = {GAP_NO_EQUIVALENT, GAP_FORM_NOT_FOUND, GAP_NOT_RECONSTRUCTABLE}
 
 # How each gap maps to a binary cell value for the meaning-block it belongs to.
@@ -81,7 +80,7 @@ _URALIC_TOKENS = [
     "mordvin", "saami", "western uralic", "uralic",
 ]
 
-# The Indo-Iranian contact layer — labels used to anchor the calibration.
+# The Indo-Iranian contact layer: labels used to anchor the calibration.
 # CORE = Proto-Indo-Iranian ("Aryan") era, the ~4000 BP layer.
 II_CORE_LABELS = {
     "Indo-Iranian", "Indo-Iranian_or_Iranian", "Indo_Iranian_or_Iranian",
@@ -96,12 +95,14 @@ II_AMBIGUOUS_LABELS = {"Indo-Iranian_or_Indo-European"}
 II_ALL_LABELS = II_CORE_LABELS | II_IRANIAN_LATER_LABELS | II_AMBIGUOUS_LABELS
 
 
-def classify_source(src):
-    """Classify a SourceLanguoid string as 'external', 'uralic', or 'ambiguous'.
+def classify_source(src: str) -> str:
+    """
+    Classify a SourceLanguoid string as 'external', 'uralic', or 'ambiguous'.
 
     'ambiguous' means the label names both an external and a Uralic donor
-    (a disjunction across the family boundary). For exclusion we fold
-    'ambiguous' in with 'external'."""
+    (a disjunction across the family boundary).
+    For exclusion I'm folding 'ambiguous' in with 'external'.
+    """
     s = src.lower()
     has_ext = any(t in s for t in _EXTERNAL_TOKENS)
     has_ura = any(t in s for t in _URALIC_TOKENS)
@@ -118,11 +119,11 @@ def is_gap(value):
     return value in GAP_MARKERS
 
 
-def cognacy_is_real(cognacy):
+def cognacy_is_real(cognacy: str) -> bool:
     """True if a Cognacy code names a real root-meaning set (not a ?/0 placeholder)."""
     return not (cognacy.endswith("-?") or cognacy.endswith("-0"))
 
 
-def ensure_dirs():
+def ensure_dirs() -> None:
     os.makedirs(ARTIFACTS_DIR, exist_ok=True)
     os.makedirs(INTERMEDIATE_DIR, exist_ok=True)

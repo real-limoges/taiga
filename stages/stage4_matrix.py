@@ -1,5 +1,5 @@
 """
-Stage 4 — Build the BEAST2-ready binary presence/absence cognate matrix.
+Stage 4: Build the BEAST2-ready binary presence/absence cognate matrix.
 
 Re-runnable: `python3 stages/stage4_matrix.py`
 
@@ -13,9 +13,10 @@ C (belonging to meaning M):
   '?'  L is a loan-recoded cell for C (Stage 3), OR L is [Form not found] /
        [Not reconstructable] / has no row for M (missing data)
 
-Two matrices are emitted:
-  * DEFAULT  — loan-excluded (Stage 3 decisions applied). This is the deliverable.
-  * BASELINE — every real cognate set, no loan handling, for comparison.
+Three matrices are emitted:
+  * DEFAULT: loan-excluded (Stage 3 decisions applied). This is the deliverable.
+  * BASELINE: every real cognate set, no loan handling, for comparison.
+  * AGGRESSIVE: inherited-only, every loan-flagged cell recoded to '?'.
 
 After coding we drop characters that are non-variable *or* carry no observed
 presence (e.g. a set all of whose cells were loan-recoded to '?'), logging each
@@ -23,7 +24,11 @@ dropped character and why. Outputs: Nexus (`.nex`, MrBayes/BEAST2 restriction
 `datatype=standard`/binary) and a human-readable CSV, for both matrices, plus a
 `matrix_report.json`. Proto-Uralic* is included but flagged.
 """
-import csv, json, os, sys, collections
+import collections
+import csv
+import json
+import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import stage0_config as cfg
@@ -115,7 +120,7 @@ def build_matrix(tables, status, decisions, recode_set, pre_exclude):
 def write_nexus(path, varieties, char_meta, matrix, title):
     langmeta = {v["id"]: v for v in varieties}
     lang_ids = [v["id"] for v in varieties]
-    taxa = [_safe_taxon(langmeta[l]["name"]) for l in lang_ids]
+    taxa = [_safe_taxon(langmeta[lid]["name"]) for lid in lang_ids]
     nchar = len(char_meta)
     width = max(len(t) for t in taxa) + 2
     with open(path, "w") as f:
@@ -138,8 +143,8 @@ def write_nexus(path, varieties, char_meta, matrix, title):
             labels.append(f"        {i} {lab}")
         f.write(",\n".join(labels) + "\n    ;\n")
         f.write("    MATRIX\n")
-        for l, t in zip(lang_ids, taxa):
-            f.write(f"        {t.ljust(width)}{''.join(matrix[l])}\n")
+        for lid, t in zip(lang_ids, taxa, strict=True):
+            f.write(f"        {t.ljust(width)}{''.join(matrix[lid])}\n")
         f.write("    ;\nEND;\n\n")
         # A charset block grouping characters by meaning (useful for partitioning)
         f.write("BEGIN SETS;\n")
@@ -160,9 +165,9 @@ def write_csv(path, varieties, char_meta, matrix):
         w = csv.writer(f)
         w.writerow(["taxon", "subgroup", "is_reconstruction"] +
                    [cm["cogset"] for cm in char_meta])
-        for l in lang_ids:
-            w.writerow([langmeta[l]["name"], langmeta[l]["subgroup"],
-                        langmeta[l]["is_proto"]] + matrix[l])
+        for lid in lang_ids:
+            w.writerow([langmeta[lid]["name"], langmeta[lid]["subgroup"],
+                        langmeta[lid]["is_proto"]] + matrix[lid])
 
 
 def run():

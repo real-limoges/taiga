@@ -1,5 +1,5 @@
 """
-Stage 5 — Derive the Indo-Iranian contact-layer calibration node and scheme.
+Stage 5: Derive the Indo-Iranian contact-layer calibration node and scheme.
 
 Re-runnable: `python3 stages/stage5_calibration.py`
 
@@ -14,7 +14,11 @@ The empirical distribution is computed here so the reasoning in
 not to memory. The prose argument lives in the JSON `reasoning` block and,
 expanded, in artifacts/SCHEMA.md.
 """
-import csv, json, os, sys, collections
+import collections
+import csv
+import json
+import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import stage0_config as cfg
@@ -25,7 +29,7 @@ def run():
     with open(os.path.join(cfg.INTERMEDIATE_DIR, "stage1_tables.json")) as f:
         tables = json.load(f)
     forms = {f["ID"]: f for f in tables["forms"]}
-    langmeta = {l["ID"]: l for l in tables["languages"]}
+    langmeta = {lang["ID"]: lang for lang in tables["languages"]}
     params = {p["ID"]: p for p in tables["parameters"]}
     borrowings = tables["borrowings"]
 
@@ -132,7 +136,7 @@ def run():
     # ------------------------------------------------------------------ #
     # 4. Node determination + branch-specific-reflex evidence.            #
     # ------------------------------------------------------------------ #
-    # Pull the 'horn' set (40-a) reflexes to CHARACTERISE the item (one
+    # Pull the 'horn' set (40-a) reflexes to CHARACTERIZE the item (one
     # representative major language per subgroup, avoiding outliers like the
     # Livonian form which has lost -v-). NB: these are illustrative only; see the
     # direction reasoning for why regular reflexes do NOT date the borrowing.

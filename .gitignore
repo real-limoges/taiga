@@ -4,3 +4,10 @@ __pycache__/
 artifacts/
 .ruff_cache/
 .ty_cache/
+
+# the notes tree stays out of git
+docs/*
+# except reference/: external sources and architecture diagrams
+!docs/reference/
+
+.DS_Store

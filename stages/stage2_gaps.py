@@ -1,11 +1,11 @@
 """
-Stage 2 — Classify marked gaps and build the per-(language, meaning) status map.
+Stage 2: Classify marked gaps and build the per-(language, meaning) status map.
 
 Re-runnable: `python3 stages/stage2_gaps.py`
 
 UraLex marks three kinds of gap in `forms.csv::Value`:
 
-  [No equivalent]      the concept is genuinely not lexicalised in the language
+  [No equivalent]      the concept is genuinely not lexicalized in the language
                        -> STRUCTURAL ABSENCE. Coded 0 for every character of
                        that meaning: the language really lacks any root here.
   [Form not found]     the compilers could not locate a form (data gap)
@@ -19,14 +19,18 @@ would silently invent either false absences or false uncertainty.
 
 One data quirk is handled explicitly: the single row `0-62-1`
 (Proto-Uralic, meaning 62) carries Value "[Not reconstructable]" yet was also
-assigned the real cognate code `62-a`. We honour the gap marker (treat it as
+assigned the real cognate code `62-a`. We honor the gap marker (treat it as
 missing) and do NOT let it contribute a presence, and we record the quirk.
 
 Writes `artifacts/_intermediate/stage2_status.json`
 (status per (language_id, parameter_id)) and `artifacts/gap_report.json` /
 `artifacts/gap_report.csv`.
 """
-import csv, json, os, sys, collections
+import collections
+import csv
+import json
+import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import stage0_config as cfg
@@ -37,7 +41,7 @@ def run():
     with open(os.path.join(cfg.INTERMEDIATE_DIR, "stage1_tables.json")) as f:
         tables = json.load(f)
     forms = tables["forms"]
-    langmeta = {l["ID"]: l for l in tables["languages"]}
+    langmeta = {lang["ID"]: lang for lang in tables["languages"]}
 
     # Group form rows by (language, parameter/meaning).
     by_lm = collections.defaultdict(list)

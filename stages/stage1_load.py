@@ -1,32 +1,36 @@
 """
-Stage 1 — Load and validate the vendored UraLex CLDF tables.
+Stage 1: Load and validate the vendored UraLex CLDF tables.
 
 Re-runnable: `python3 stages/stage1_load.py`
 
 Reads the five CLDF tables, checks structural invariants (row counts, the
-27 sampled varieties, referential integrity of the borrowing table), and writes
-`artifacts/_intermediate/stage1_tables.json` for downstream stages plus a small
-`artifacts/stage1_load_report.json` summary. Fails loudly if an invariant the
-later stages rely on is violated.
+sampled varieties, referential integrity of the borrowing table), and writes:
+- `artifacts/_intermediate/stage1_tables.json` for downstream stages
+- a small `artifacts/stage1_load_report.json` summary.
+Fails loudly if an invariant the later stages rely on is violated.
 """
-import csv, json, os, sys
+import csv
+import json
+import os
+import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import stage0_config as cfg
 
 
-def _load_csv(name):
+def load_csv(name: str) -> tuple[dict[str, str], ...]:
     with open(os.path.join(cfg.DATA_DIR, name), newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+        return tuple(csv.DictReader(f))
 
 
 def run():
     cfg.ensure_dirs()
-    languages = _load_csv("languages.csv")
-    parameters = _load_csv("parameters.csv")
-    forms = _load_csv("forms.csv")
-    cognates = _load_csv("cognates.csv")
-    borrowings = _load_csv("borrowings.csv")
+    languages = load_csv("languages.csv")
+    parameters = load_csv("parameters.csv")
+    forms = load_csv("forms.csv")
+    cognates = load_csv("cognates.csv")
+    borrowings = load_csv("borrowings.csv")
 
     report = {"stage": "stage1_load", "counts": {}, "checks": {}, "warnings": []}
     report["counts"] = {
@@ -45,7 +49,7 @@ def run():
         report["warnings"].append(
             f"Expected 27 varieties in forms.csv, found {len(form_lang_ids)}")
 
-    langmeta = {l["ID"]: l for l in languages}
+    langmeta = {lang["ID"]: lang for lang in languages}
     varieties = []
     for lid in form_lang_ids:
         m = langmeta[lid]
